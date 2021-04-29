@@ -1,0 +1,58 @@
+---
+
+#####
+# Install docker-compose and python3-docker module
+#####
+
+#####
+# Debian
+#####
+
+- name: Update apt packages
+  apt:
+    update_cache: yes
+  become: true
+  when: ansible_os_family == 'Debian'
+
+- name: update packages
+  apt:
+    state: latest
+    name: '{{ item }}' 
+    update_cache: yes
+  become: yes
+  loop:
+    - python3
+    - python3-pip
+  when: ansible_os_family == 'Debian'
+  
+#####
+# RedHat
+#####
+
+- name: Update yum packages
+  yum:
+    update_cache: yes
+  become: true
+  when: ansible_os_family == 'RedHat' and ansible_python_interpreter == '/usr/bin/python2'
+
+- name: update python3 and pip3
+  yum:
+    state: latest
+    name: '{{ item }}' 
+    update_cache: yes
+  become: yes
+  loop:
+    - python3
+    - python3-pip
+    - libselinux-python3
+  when: ansible_os_family == 'RedHat' and ansible_python_interpreter == '/usr/bin/python2'
+  
+- name: install docker, docker-compose and boto3 in python3
+  pip:
+    name: 
+      - docker
+      - docker-compose
+      - boto3
+      - jsondiff
+    state: present
+  when: ansible_python_interpreter == '/usr/bin/python3'

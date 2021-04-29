@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+    dhcpd:
+        build: {{maindir}}dhcp/{{nombrecliente}}/
+        container_name: dhcpd
+        restart: unless-stopped
+        networks:
+            {{networkname}}:
+                ipv4_address: {{ipcontenedor}}
+        volumes:
+            - {{maindir}}dhcp/{{nombrecliente}}/dhcpd.conf:/etc/dhcp/dhcpd.conf
+networks:
+    {{networkname}}:
+        external: true

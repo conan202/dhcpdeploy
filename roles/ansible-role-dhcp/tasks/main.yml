@@ -1,0 +1,64 @@
+---
+# based in https://github.com/mikejoh/docker-dhcpd/
+- name: Create installation directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+    mode: "u=rwxr,g=rwxr,o=rwxr"
+  with_items:
+    - "{{maindir}}"
+    - "{{maindir}}dhcp"
+    - "{{maindir}}dhcp/{{nombrecliente}}"
+    
+- name: Copy templates
+  template:
+    src: "{{ item }}"
+    dest: "{{maindir}}dhcp/{{nombrecliente}}/{{item}}"
+    owner: "{{ ansible_ssh_user }}"
+    group: "{{ ansible_ssh_user }}"
+  with_items:
+    - docker-compose.yml
+    - Dockerfile
+    - dhcpd.conf
+- name: Make sure a Docker is running
+  systemd:
+    state: started
+    name: docker
+
+- name: Pull docker images
+  docker_image:
+    name: "{{ item }}"
+    source: pull
+  with_items: 
+    - "{{ docker_image }}"
+
+- name: Netplan templates vlan interface
+  template:
+    src: "netplan.yaml"
+    dest: "/etc/netplan/50-{{parentinterface}}.yaml"
+  become: true
+#    ip link delete {{parentinterface}} type vlan
+  
+#    ip link add link {{interfacename}} name {{parentinterface}} type vlan id {{tagvlan}}
+#    ip link add {{parentinterface}} link {{interfacename}} type macvlan mode bridge
+
+- name: add vlan interface 
+  shell: | 
+    ip link delete {{parentinterface}} type macvlan
+    ip link add link {{interfacename}} name {{parentinterface}} type macvlan mode bridge
+    ip addr add {{configintvlan}} dev {{parentinterface}} 
+- name: Create the network
+  docker_network:
+    name: "{{networkname}}"
+    driver: "macvlan"
+    driver_options:
+        parent: "{{interfacename}}"
+    ipam_config:
+      - subnet: "{{containersubnet}}"
+        gateway: "{{containergw}}"
+- name: Start the containers
+  docker_compose:
+    project_src: '{{maindir}}dhcp/{{nombrecliente}}/'
+    build: yes

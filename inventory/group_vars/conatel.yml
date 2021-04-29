@@ -1,0 +1,13 @@
+---
+nombrecliente: cona
+docker_image: alpine:latest
+networkname: macvlan0
+maindir: /opt/conatel/
+interfacename: "enp0s8" #ens160
+tagvlan: "99"
+parentinterface: "{{interfacename}}.{{tagvlan}}"
+#IP container and VLAN
+ipcontenedor: "10.0.99.6" 
+containergw: "10.0.99.1"
+containersubnet: "10.0.99.0/24"
+configintvlan: "10.0.99.5/24"

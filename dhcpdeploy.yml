@@ -1,0 +1,13 @@
+---
+- name: Install dhcp in docker
+  hosts: "{{ target }}"
+  become: true
+  gather_facts: yes
+  tasks:
+    - name: Install dhcp docker
+      include_role:
+        name: '{{ item }}'
+      with_items:
+        # - addons
+        # - ansible-role-docker
+        - ansible-role-dhcp
