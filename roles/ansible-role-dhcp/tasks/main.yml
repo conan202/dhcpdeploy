@@ -44,7 +44,7 @@
 #    ip link add link {{interfacename}} name {{parentinterface}} type vlan id {{tagvlan}}
 #    ip link add {{parentinterface}} link {{interfacename}} type macvlan mode bridge
 
-- name: add vlan interface 
+- name: Add vlan interface 
   shell: | 
     ip link delete {{parentinterface}} type macvlan
     ip link add link {{interfacename}} name {{parentinterface}} type macvlan mode bridge
