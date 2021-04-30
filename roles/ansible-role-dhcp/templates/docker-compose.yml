@@ -10,8 +10,8 @@ services:
                 ipv4_address: {{ipcontenedor}}
         volumes:
             - {{maindir}}dhcp/{{nombrecliente}}/dhcpd.conf:/etc/dhcp/dhcpd.conf
-        ports:
-         - 67:67             
+        # ports:
+        #  - 67:67             
 networks:
     {{networkname}}:
         external: true

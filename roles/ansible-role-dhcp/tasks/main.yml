@@ -40,18 +40,18 @@
 #     dest: "/etc/netplan/50-{{parentinterface}}.yaml"
 #   become: true
 
-# - name: Add vlan interface 
-#   shell: | 
-#     ip link delete {{parentinterface}} type macvlan
-#     ip link add link {{interfacename}} name {{parentinterface}} type macvlan mode bridge
-#     ip addr add {{configintvlan}} dev {{parentinterface}} 
+- name: Add vlan interface 
+  shell: | 
+    ip link delete {{parentinterface}} type macvlan
+    ip link add link {{interfacename}} name {{parentinterface}} type macvlan mode bridge
+    ip addr add {{configintvlan}} dev {{parentinterface}} 
 
 - name: Create the network
   docker_network:
     name: "{{networkname}}"
     driver: "macvlan"
-    # driver_options:
-    #     parent: "{{interfacename}}"
+    driver_options:
+        parent: "{{interfacename}}"
     ipam_config:
       - subnet: "{{containersubnet}}"
         gateway: "{{containergw}}"
