@@ -22,6 +22,7 @@
     - docker-compose.yml
     - Dockerfile
     - dhcpd.conf
+    - dhcpd.leases
 - name: Make sure a Docker is running
   systemd:
     state: started
@@ -55,7 +56,20 @@
     ipam_config:
       - subnet: "{{containersubnet}}"
         gateway: "{{containergw}}"
+    # scope: swarm
+# - name: Init a new swarm with default parameters
+#   docker_swarm:
+#     advertise_addr: "{{ ansible_host }}"
+#     state: present
+# - name: Deploy stack from a compose file
+#   docker_stack:
+#     name: dhcpd-service
+#     compose:
+#       - '{{maindir}}dhcp/{{nombrecliente}}/docker-compose.yml'
+
 - name: Start the containers
   docker_compose:
     project_src: '{{maindir}}dhcp/{{nombrecliente}}/'
     build: yes
+# para probar dhcp
+#nmap -sU -p 67 --script=dhcp-discover {{ipcontenedor}}  
