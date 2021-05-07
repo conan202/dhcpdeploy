@@ -46,7 +46,6 @@
     ip link delete {{parentinterface}} type macvlan
     ip link add link {{interfacename}} name {{parentinterface}} type macvlan mode bridge
     ip addr add {{configintvlan}} dev {{parentinterface}} 
-
 - name: Create the network
   docker_network:
     name: "{{networkname}}"
@@ -56,7 +55,7 @@
     ipam_config:
       - subnet: "{{containersubnet}}"
         gateway: "{{containergw}}"
-    # scope: swarm
+#     scope: swarm
 # - name: Init a new swarm with default parameters
 #   docker_swarm:
 #     advertise_addr: "{{ ansible_host }}"
@@ -72,4 +71,5 @@
     project_src: '{{maindir}}dhcp/{{nombrecliente}}/'
     build: yes
 # para probar dhcp
-#nmap -sU -p 67 --script=dhcp-discover {{ipcontenedor}}  
+# nmap -sU -p 67 --script=dhcp-discover {{ipcontenedor}}  
+# nmap -sU -p 67 --script=dhcp-discover 10.0.99.6
