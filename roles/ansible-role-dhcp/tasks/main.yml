@@ -49,9 +49,11 @@
 - name: Create the network
   docker_network:
     name: "{{networkname}}"
-    driver: "macvlan"
+    #driver: "macvlan"
+    driver: "bridge"
+
     driver_options:
-        parent: "{{interfacename}}"
+      parent: "{{interfacename}}"
     ipam_config:
       - subnet: "{{containersubnet}}"
         gateway: "{{containergw}}"

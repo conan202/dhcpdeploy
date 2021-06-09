@@ -10,4 +10,17 @@ parentinterface: "{{interfacename}}.{{tagvlan}}"
 ipcontenedor: "10.0.99.6" 
 containergw: "10.0.99.1"
 containersubnet: "10.0.99.0/24"
+containersubnetip: "10.0.99.0"
+containersubnetmask: "255.255.255.0"
 configintvlan: "10.0.99.5/24"
+# red a entregar al cliente
+
+subnet_cliente: "10.0.0.0" 
+netmask_cliente: "255.255.0.0"
+routers_cliente: "10.0.0.1"
+subnetmask_cliente: "255.255.0.0"
+rangoip_cliente: "10.0.0.151 10.0.0.200"
+broadcast_cliente: "10.0.0.255"
+dns_cliente: "8.8.8.8, 8.8.4.4"
+
+
