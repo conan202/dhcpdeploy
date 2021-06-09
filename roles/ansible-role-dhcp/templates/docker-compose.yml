@@ -13,7 +13,7 @@ services:
             context: {{maindir}}dhcp/{{nombrecliente}}/
             dockerfile: Dockerfile
         image: {{docker_image}}
-        container_name: dhcpd
+        container_name: dhcpd_{{nombrecliente}}
         restart: unless-stopped
         networks:
             {{networkname}}:
