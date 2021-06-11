@@ -3,6 +3,7 @@ nombrecliente: cona
 docker_image: alpine:latest
 networkname: macvlan0{{nombrecliente}}
 maindir: /opt/conatel/
+#interface que vamos a "bridgear"
 interfacename: enp0s8 # ens160 #enp0s8
 tagvlan: 99
 parentinterface: "{{interfacename}}.{{tagvlan}}"
@@ -12,7 +13,11 @@ containergw: 10.0.99.1
 containersubnet: 10.0.99.0/24
 containersubnetip: 10.0.99.0
 containersubnetmask: 255.255.255.0
-configintvlan: 10.0.99.5/24
+vlanip: 10.0.99.5
+vlanmask: 24
+vlanmaskext: 255.255.255.0
+configintvlan: "{{vlanip}}/{{vlanmask}}"
+
 # red a entregar al cliente
 
 subnet_cliente: 10.0.0.0 

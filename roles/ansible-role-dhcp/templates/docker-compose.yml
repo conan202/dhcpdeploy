@@ -3,12 +3,6 @@ version: '3.9'
 services:
     dhcpd:
         restart: unless-stopped        
-        # deploy:
-        #     restart_policy:
-        #         condition: any
-        #         delay: 5s
-        #         max_attempts: 3
-        #         window: 120s        
         build: 
             context: {{maindir}}dhcp/{{nombrecliente}}/
             dockerfile: Dockerfile
@@ -23,7 +17,6 @@ services:
             - {{maindir}}dhcp/{{nombrecliente}}/dhcpd.conf:/etc/dhcp/dhcpd.conf
             # base de datos dhcp
             - {{maindir}}dhcp/{{nombrecliente}}/dhcpd.leases:/var/lib/dhcp/dhcpd.leases 
-
         # ports:
         #  - 67:67             
 networks:

@@ -1,5 +1,21 @@
 ---
 # based in https://github.com/mikejoh/docker-dhcpd/
+- name: Add vlan interface 
+  shell: | 
+    ip link delete {{parentinterface}} type macvlan
+    ip link add link {{interfacename}} name {{parentinterface}} type macvlan mode bridge
+    ip addr add {{configintvlan}} dev {{parentinterface}} 
+    
+# - name: /etc/network/interfaces
+#   lineinfile:
+#       path: /etc/network/interfaces
+#       line: |
+#         iface {{parentinterface}} inet static
+#           vlan-raw-device {{interfacename}}
+#           address {{vlanip}}
+#           netmask {{vlanmaskext}}
+#     touch /etc/network/interfaces
+
 - name: Create installation directory
   file:
     path: "{{ item }}"
@@ -41,19 +57,16 @@
 #     dest: "/etc/netplan/50-{{parentinterface}}.yaml"
 #   become: true
 
-- name: Add vlan interface 
-  shell: | 
-    ip link delete {{parentinterface}} type macvlan
-    ip link add link {{interfacename}} name {{parentinterface}} type macvlan mode bridge
-    ip addr add {{configintvlan}} dev {{parentinterface}} 
+
 - name: Create the network
   docker_network:
     name: "{{networkname}}"
-    #driver: "macvlan"
-    driver: "bridge"
+    driver: "macvlan"
+    #driver: "bridge"
 
     driver_options:
-      parent: "{{interfacename}}"
+      #parent: "{{interfacename}}"
+      parent: "{{parentinterface}}"
     ipam_config:
       - subnet: "{{containersubnet}}"
         gateway: "{{containergw}}"
